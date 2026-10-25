@@ -1,0 +1,983 @@
+/* --p is one game pixel; the game scales its screens in whole steps, and so does the site. */
+:root {
+	--p: 2px;
+	--bg: #23262f;
+	--panel: #c6c6c6;
+	--panel-light: #fff;
+	--panel-dark: #555;
+	--text: #3f3f3f;
+	--slot: #8b8b8b;
+	--slot-dark: #373737;
+	--slot-light: #fff;
+	color-scheme: dark;
+}
+
+@media (min-width: 1024px) {
+	:root {
+		--p: 3px;
+	}
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: #e8e8e8;
+	font-family: "DotGothic16", monospace;
+	font-size: 16px;
+	line-height: 1.6;
+}
+
+main {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 16px 24px;
+}
+
+img {
+	max-width: none;
+}
+
+.px,
+.jei,
+.slot.framed,
+.slot.rolled {
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
+
+.title {
+	margin: 16px 0;
+	color: #fff;
+	font-size: 1.6rem;
+	font-weight: normal;
+	text-shadow: var(--p) var(--p) 0 #3f3f3f;
+}
+
+/* Tabs, after the creative inventory's */
+
+/* Seven tabs do not fit a phone, so the row scrolls sideways by itself, a shade on its right
+   edge saying there is more; the page never does. */
+.tabs {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	display: flex;
+	gap: calc(var(--p) * 2);
+	padding: 8px 8px 0;
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	scrollbar-width: none;
+	background: var(--bg);
+	border-bottom: var(--p) solid #000;
+	-webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), rgb(0 0 0 / 0.35));
+	mask-image: linear-gradient(90deg, #000 calc(100% - 24px), rgb(0 0 0 / 0.35));
+}
+
+.tabs::-webkit-scrollbar {
+	display: none;
+}
+
+.tabs.at-end {
+	-webkit-mask-image: none;
+	mask-image: none;
+}
+
+.tab:first-child {
+	margin-left: auto;
+}
+
+.tab:last-child {
+	margin-right: auto;
+}
+
+.tab {
+	display: flex;
+	flex: none;
+	align-items: center;
+	white-space: nowrap;
+	gap: 6px;
+	min-height: 44px;
+	padding: 4px 14px;
+	background: var(--slot);
+	color: var(--text);
+	text-decoration: none;
+	border: var(--p) solid #000;
+	border-bottom: none;
+	border-radius: calc(var(--p) * 3) calc(var(--p) * 3) 0 0;
+	box-shadow: inset var(--p) var(--p) 0 #a8a8a8;
+}
+
+.tab[aria-current="page"] {
+	background: var(--panel);
+	box-shadow: inset calc(var(--p) * 2) calc(var(--p) * 2) 0 var(--panel-light);
+}
+
+.tab:focus-visible,
+.slot:focus-visible,
+summary:focus-visible {
+	outline: var(--p) solid #ffff55;
+	outline-offset: var(--p);
+}
+
+.tab-icon {
+	width: calc(var(--p) * 16);
+	height: calc(var(--p) * 16);
+}
+
+/* Narrower tabs up to 1199 px, so the row fits a 1024 px window once the game pixel grows to 3 px. */
+@media (min-width: 600px) and (max-width: 1199px) {
+	.tab {
+		gap: 4px;
+		padding: 4px 8px;
+	}
+}
+
+@media (max-width: 599px) {
+	.tabs {
+		gap: 4px;
+		padding: 6px 6px 0;
+	}
+
+	.tab {
+		flex: none;
+		min-width: 64px;
+		flex-direction: column;
+		gap: 0;
+		padding: 4px 2px;
+		font-size: 12px;
+		line-height: 1.3;
+	}
+}
+
+/* Panels */
+
+.panel {
+	margin: 0 0 16px;
+	padding: calc(var(--p) * 6) calc(var(--p) * 7);
+	background: var(--panel);
+	color: var(--text);
+	border: var(--p) solid #000;
+	border-radius: calc(var(--p) * 3);
+	box-shadow: inset calc(var(--p) * 2) calc(var(--p) * 2) 0 var(--panel-light), inset calc(var(--p) * -2) calc(var(--p) * -2) 0 var(--panel-dark);
+	overflow-wrap: anywhere;
+}
+
+@media (max-width: 599px) {
+	.panel {
+		padding: calc(var(--p) * 5) calc(var(--p) * 4);
+	}
+}
+
+.panel h2 {
+	margin: 0 0 0.4em;
+	font-size: 1.25rem;
+	font-weight: normal;
+}
+
+.panel h3 {
+	margin: 1em 0 0.3em;
+	font-size: 1.05rem;
+	font-weight: normal;
+}
+
+.panel p {
+	margin: 0.5em 0;
+}
+
+.panel ul {
+	margin: 0.5em 0;
+	padding-left: 1.4em;
+}
+
+.panel a {
+	color: #2b3f9e;
+}
+
+code {
+	padding: 0 0.25em;
+	background: rgb(0 0 0 / 0.12);
+	font-family: inherit;
+	overflow-wrap: anywhere;
+}
+
+strong {
+	font-weight: normal;
+	color: #000;
+	background: linear-gradient(transparent 60%, #ffff9f 60%);
+}
+
+/* Slots */
+
+.slot {
+	position: relative;
+	display: inline-block;
+	flex: none;
+	width: calc(var(--p) * 18);
+	height: calc(var(--p) * 18);
+	background: var(--slot);
+	box-shadow: inset var(--p) var(--p) 0 var(--slot-dark), inset calc(var(--p) * -1) calc(var(--p) * -1) 0 var(--slot-light);
+	vertical-align: middle;
+}
+
+.slot .icon {
+	position: absolute;
+	left: var(--p);
+	top: var(--p);
+	width: calc(var(--p) * 16);
+	height: calc(var(--p) * 16);
+}
+
+.slot.big {
+	width: calc(var(--p) * 26);
+	height: calc(var(--p) * 26);
+}
+
+.slot.big .icon {
+	left: calc(var(--p) * 5);
+	top: calc(var(--p) * 5);
+}
+
+.slot[data-items]:hover::after,
+.slot[data-items]:focus-visible::after {
+	content: "";
+	position: absolute;
+	inset: var(--p);
+	background: rgb(255 255 255 / 0.45);
+	pointer-events: none;
+}
+
+.slot.big[data-items]:hover::after,
+.slot.big[data-items]:focus-visible::after {
+	inset: calc(var(--p) * 5);
+}
+
+.slot.bare {
+	position: absolute;
+	background: none;
+	box-shadow: none;
+}
+
+.slot.framed {
+	background: url(gui/jei/cutting_board.png) 0 calc(var(--p) * -58) / calc(var(--p) * 256) calc(var(--p) * 256) no-repeat;
+}
+
+.slot.rolled {
+	background: url(gui/jei/cutting_board.png) calc(var(--p) * -18) calc(var(--p) * -58) / calc(var(--p) * 256) calc(var(--p) * 256) no-repeat;
+}
+
+.count {
+	position: absolute;
+	right: 0;
+	bottom: calc(var(--p) * -1);
+	color: #fff;
+	font-size: calc(var(--p) * 9);
+	line-height: 1;
+	text-shadow: var(--p) var(--p) 0 #3f3f3f;
+	pointer-events: none;
+}
+
+/* A big slot draws its item 5 pixels in, and the count sits at the item's corner as in the game. */
+.slot.big .count {
+	right: calc(var(--p) * 4);
+	bottom: calc(var(--p) * 3);
+}
+
+.chance {
+	position: absolute;
+	left: 0;
+	top: calc(var(--p) * -1);
+	color: #ffaa00;
+	font-size: calc(var(--p) * 6);
+	line-height: 1;
+	text-shadow: var(--p) var(--p) 0 #3f2a00;
+	pointer-events: none;
+}
+
+.vh {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+.chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin: 2px 2px;
+	vertical-align: middle;
+}
+
+.effect-icon {
+	width: calc(var(--p) * 18);
+	height: calc(var(--p) * 18);
+}
+
+.item-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 14px;
+	margin: 8px 0;
+}
+
+/* Recipe screens */
+
+.recipe {
+	display: inline-flex;
+	flex-direction: column;
+	gap: 6px;
+	margin: 0;
+	padding: calc(var(--p) * 4);
+	background: var(--panel);
+	border: var(--p) solid var(--slot);
+	border-radius: var(--p);
+	max-width: 100%;
+	vertical-align: top;
+}
+
+/* Recipes placed one after another in a section keep apart, across and down. */
+.panel > .recipe {
+	margin: 0 8px 8px 0;
+}
+
+.recipe figcaption {
+	font-size: 0.85rem;
+	line-height: 1.4;
+}
+
+.note {
+	margin-left: 0.5em;
+	color: #555;
+	font-size: 0.85rem;
+}
+
+.machine {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: calc(var(--p) * 4);
+}
+
+.grid3 {
+	display: grid;
+	grid-template-columns: repeat(3, calc(var(--p) * 18));
+}
+
+.grid2 {
+	display: grid;
+	grid-template-columns: repeat(2, calc(var(--p) * 18));
+}
+
+/* A fluid of a keg recipe: the item standing for it, with its millibuckets beneath. */
+.fluid {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.fluid-amount {
+	color: #555;
+	font-size: 0.75rem;
+	white-space: nowrap;
+}
+
+.pour {
+	display: inline-flex;
+	align-items: center;
+	gap: calc(var(--p) * 4);
+}
+
+.arrow {
+	display: inline-block;
+	flex: none;
+	width: calc(var(--p) * 22);
+	height: calc(var(--p) * 15);
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 15' shape-rendering='crispEdges'%3E%3Cpath fill='%238b8b8b' d='M0 6h14V0h1v1h1v1h1v1h1v1h1v1h1v1h1v1h1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1V9H0z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+.flame {
+	display: inline-block;
+	width: calc(var(--p) * 14);
+	height: calc(var(--p) * 14);
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' shape-rendering='crispEdges'%3E%3Cpath fill='%23e86a10' d='M6 0h2v2h1v2h1v1h1v2h1v4h-1v2h-1v1H4v-1H3v-2H2V7h1V5h1V3h1V1h1z'/%3E%3Cpath fill='%23ffd23c' d='M6 6h2v2h1v3H8v1H6v-1H5V8h1z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+.furnace-in {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	gap: calc(var(--p) * 2);
+}
+
+.shapeless {
+	align-self: flex-start;
+	color: #555;
+	font-size: 0.75rem;
+}
+
+.jei {
+	position: relative;
+	display: block;
+	flex: none;
+	width: calc(var(--p) * 116);
+	height: calc(var(--p) * 56);
+	background: url(gui/jei/cooking_pot.png) 0 0 / calc(var(--p) * 256) calc(var(--p) * 256) no-repeat;
+}
+
+.jei.board {
+	width: calc(var(--p) * 117);
+	height: calc(var(--p) * 57);
+	background-image: url(gui/jei/cutting_board.png);
+}
+
+.pot-arrow,
+.pot-heat {
+	position: absolute;
+	background: url(gui/cooking_pot.png) calc(var(--p) * -176) calc(var(--p) * -15) / calc(var(--p) * 256) calc(var(--p) * 256) no-repeat;
+	image-rendering: pixelated;
+}
+
+.pot-arrow {
+	width: calc(var(--p) * 24);
+	height: calc(var(--p) * 17);
+}
+
+.pot-heat {
+	width: calc(var(--p) * 17);
+	height: calc(var(--p) * 15);
+	background-position: calc(var(--p) * -176) 0;
+}
+
+details.recipes {
+	margin: 10px 0;
+}
+
+details.recipes > summary {
+	display: flex;
+	align-items: center;
+	min-height: 44px;
+	padding: 6px 12px;
+	background: #6f6f6f;
+	color: #fff;
+	text-shadow: var(--p) var(--p) 0 #3f3f3f;
+	border: var(--p) solid #000;
+	box-shadow: inset var(--p) var(--p) 0 #aaa, inset calc(var(--p) * -1) calc(var(--p) * -2) 0 #444;
+	cursor: pointer;
+	list-style: none;
+}
+
+details.recipes > summary::-webkit-details-marker {
+	display: none;
+}
+
+details.recipes > summary::before {
+	content: "▶";
+	margin-right: 8px;
+	font-size: 0.8em;
+}
+
+details.recipes[open] > summary::before {
+	content: "▼";
+}
+
+.recipe-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 8px;
+}
+
+/* Recipes side by side share a row's height, and the page's script gives them the widest one's width. */
+.recipe-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0 0 8px;
+}
+
+.recipe-row > .recipe,
+.recipe-list > .recipe {
+	width: var(--recipe-width, auto);
+}
+
+/* Cards */
+
+.cards {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 12px;
+	margin: 10px 0;
+}
+
+@media (min-width: 600px) {
+	.cards {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 1400px) {
+	.cards {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+.card {
+	min-width: 0;
+	padding: 10px;
+	background: #d6d6d6;
+	border: var(--p) solid var(--slot);
+	border-radius: var(--p);
+}
+
+.card-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 6px !important;
+}
+
+.facts {
+	list-style: none;
+	margin: 0 0 8px !important;
+	padding: 0 !important;
+}
+
+.facts li {
+	margin: 3px 0;
+}
+
+.effect-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	align-items: start;
+	gap: 2px 14px;
+	list-style: none;
+	padding: 0 !important;
+}
+
+/* Wide enough for a label and two effects on one line. */
+.effect-list {
+	grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr));
+}
+
+/* A note that does not fit beside its effect moves below it whole, never split across lines. */
+.effect-list li {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	column-gap: 6px;
+}
+
+.station {
+	align-self: flex-end;
+}
+
+/* Crops */
+
+.crop-head {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0 0 6px;
+}
+
+
+.stages {
+	margin: 8px 0;
+}
+
+.stages figcaption {
+	font-size: 0.85rem;
+}
+
+.stage-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: var(--p);
+}
+
+.stage {
+	display: flex;
+	flex-direction: column;
+	padding: var(--p);
+	background: var(--slot);
+	box-shadow: inset var(--p) var(--p) 0 var(--slot-dark), inset calc(var(--p) * -1) calc(var(--p) * -1) 0 var(--slot-light);
+}
+
+.stage img {
+	display: block;
+	width: calc(var(--p) * 16);
+	height: calc(var(--p) * 16);
+}
+
+/* Tooltip, after the game's */
+
+.tooltip {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 20;
+	max-width: min(92vw, 360px);
+	padding: calc(var(--p) * 3) calc(var(--p) * 4);
+	background: rgb(16 0 16 / 0.94);
+	color: #fff;
+	border: var(--p) solid transparent;
+	border-image: linear-gradient(#5000ff, #28007f) 1;
+	box-shadow: 0 0 0 var(--p) #100010;
+	font-size: 15px;
+	line-height: 1.5;
+	pointer-events: none;
+}
+
+.tooltip.docked {
+	left: 12px !important;
+	right: 12px;
+	top: auto !important;
+	bottom: 12px;
+	max-width: none;
+	pointer-events: auto;
+}
+
+.tooltip .t-line {
+	color: #aaa;
+}
+
+.tooltip .t-mod {
+	color: #5555ff;
+	font-style: italic;
+}
+
+[hidden] {
+	display: none !important;
+}
+
+.license {
+	white-space: pre-wrap;
+	font-family: monospace;
+	font-size: 0.75rem;
+}
+
+/* Footer */
+
+.footer {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 8px 16px 32px;
+	color: #aaa;
+	font-size: 0.8rem;
+}
+
+.footer a {
+	color: #9fb4ff;
+}
+
+/* Keys, after the game's buttons */
+
+kbd.key {
+	display: inline-block;
+	min-width: 1.8em;
+	margin: 0 2px;
+	padding: 0 0.4em;
+	background: #8b8b8b;
+	color: #fff;
+	font: inherit;
+	line-height: 1.5;
+	text-align: center;
+	text-shadow: var(--p) var(--p) 0 #3f3f3f;
+	border: var(--p) solid #000;
+	box-shadow: inset var(--p) var(--p) 0 #b5b5b5, inset calc(var(--p) * -1) calc(var(--p) * -2) 0 #555;
+	vertical-align: middle;
+}
+
+/* A piece of a screen: the panel is placed so the piece shows, and the view clips the rest. */
+
+.screen {
+	display: inline-flex;
+	flex-direction: column;
+	gap: 6px;
+	margin: 8px 0;
+	max-width: 100%;
+}
+
+.screen figcaption,
+.blocks + p,
+.hud figcaption,
+.seedmap figcaption {
+	font-size: 0.85rem;
+	line-height: 1.4;
+}
+
+.screen-view {
+	position: relative;
+	display: block;
+	box-sizing: content-box;
+	overflow: hidden;
+	background: var(--bg);
+	border: var(--p) solid #000;
+}
+
+.screen-panel {
+	position: absolute;
+	display: block;
+	background: var(--panel);
+	border-radius: calc(var(--p) * 3);
+	box-shadow: inset calc(var(--p) * 2) calc(var(--p) * 2) 0 var(--panel-light), inset calc(var(--p) * -2) calc(var(--p) * -2) 0 var(--panel-dark);
+}
+
+.screen-panel > .slot,
+.screen-panel > .part {
+	position: absolute;
+}
+
+.screen-panel > .slot.big .icon {
+	left: calc(var(--p) * 5);
+	top: calc(var(--p) * 5);
+}
+
+/* Blocks seen from the side */
+
+.blocks {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: calc(var(--p) * 4);
+	margin: 8px 0;
+}
+
+.block-grid {
+	display: grid;
+	padding: var(--p);
+	background: #8fbcf0;
+	border: var(--p) solid #000;
+}
+
+.block-grid img,
+.block-grid .air {
+	display: block;
+	width: calc(var(--p) * 16);
+	height: calc(var(--p) * 16);
+}
+
+.block-grid img.broken {
+	outline: var(--p) solid #ffff55;
+	outline-offset: calc(var(--p) * -1);
+}
+
+/* The HUD, drawn over a scene in the game's colours */
+
+.hud {
+	margin: 8px 0;
+}
+
+.hud-screen {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: calc(var(--p) * var(--hud-margin));
+	background: linear-gradient(#78a7ff 0 55%, #5d8b3a 55% 62%, #866043 62%);
+	border: var(--p) solid #000;
+	font-size: calc(var(--p) * 8 * var(--hud-scale));
+	line-height: calc(var(--p) * 9 * var(--hud-scale));
+	white-space: pre;
+}
+
+.hud-line {
+	padding: calc(var(--p) * var(--hud-pad) * var(--hud-scale));
+	background: rgb(0 0 0 / 0.5);
+	text-shadow: var(--p) var(--p) 0 rgb(0 0 0 / 0.6);
+}
+
+/* The minimap, a circle at the margin, unscaled, with the lines a gap below it */
+.hud-minimap {
+	display: block;
+	width: calc(var(--p) * var(--hud-minimap));
+	height: calc(var(--p) * var(--hud-minimap));
+	margin-bottom: calc(var(--p) * var(--hud-gap));
+	border-radius: 50%;
+	background: radial-gradient(circle, #79a852 0 30%, #5d8b3a 55%, #866043 75%, #3b6a8f 100%);
+	box-shadow: inset 0 0 0 var(--p) rgb(0 0 0 / 0.75);
+}
+
+/* A line that starts a group, a little below the line above */
+.hud-line.gap {
+	margin-top: calc(var(--p) * var(--hud-gap));
+}
+
+/* A row of icons after its label, a little below what is above it */
+.hud-row {
+	display: flex;
+	align-items: flex-start;
+	margin-top: calc(var(--p) * var(--hud-gap));
+	padding: calc(var(--p) * var(--hud-pad) * var(--hud-scale));
+	background: rgb(0 0 0 / 0.5);
+	text-shadow: var(--p) var(--p) 0 rgb(0 0 0 / 0.6);
+}
+
+.hud-label {
+	padding-top: calc(var(--p) * var(--hud-label) * var(--hud-scale));
+}
+
+.hud-row .hud-item + .hud-item {
+	margin-left: calc(var(--p) * (var(--hud-step) - var(--hud-icon)) * var(--hud-scale));
+}
+
+.hud-item {
+	position: relative;
+	display: block;
+	width: calc(var(--p) * var(--hud-icon) * var(--hud-scale));
+	height: calc(var(--p) * var(--hud-icon) * var(--hud-scale));
+}
+
+.hud-icon {
+	display: block;
+	width: 100%;
+	height: 100%;
+	image-rendering: pixelated;
+}
+
+.durability {
+	position: absolute;
+	left: calc(var(--p) * 2 * var(--hud-scale));
+	bottom: calc(var(--p) * 1 * var(--hud-scale));
+	width: calc(var(--p) * 13 * var(--hud-scale));
+	height: calc(var(--p) * 2 * var(--hud-scale));
+	background: #000;
+}
+
+.durability::after {
+	content: "";
+	display: block;
+	width: calc(var(--p) * var(--bar) * var(--hud-scale));
+	height: 50%;
+	background: hsl(calc(var(--hue) * 1deg) 100% 50%);
+}
+
+/* The seed map piece */
+
+.seedmap {
+	margin: 8px 0;
+}
+
+.seedmap-view {
+	position: relative;
+	display: block;
+	box-sizing: content-box;
+	border: var(--p) solid #000;
+}
+
+.seedmap-view > img.px {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.mapicon {
+	position: absolute;
+	width: calc(var(--p) * 8);
+	height: calc(var(--p) * 8);
+	image-rendering: pixelated;
+}
+
+.legend h3 {
+	font-size: 1rem;
+}
+
+.legend-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+	gap: 2px 12px;
+	list-style: none;
+	padding: 0 !important;
+}
+
+.legend-list li {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.mapicon-legend {
+	width: calc(var(--p) * 8);
+	height: calc(var(--p) * 8);
+	image-rendering: pixelated;
+}
+
+.swatch {
+	display: inline-block;
+	flex: none;
+	width: calc(var(--p) * 8);
+	height: calc(var(--p) * 8);
+	border: var(--p) solid #000;
+}
+
+/* Tables and lists of the crafting page and the top page */
+
+table.books {
+	width: 100%;
+	margin-top: 8px;
+	border-collapse: collapse;
+	font-size: 0.9rem;
+}
+
+table.books th,
+table.books td {
+	padding: 2px 6px;
+	border-bottom: 1px solid var(--slot);
+	text-align: left;
+}
+
+.texture-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 4px 12px;
+	margin: 8px 0;
+}
+
+.texture-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--p);
+}
+
+.texture-row img {
+	width: calc(var(--p) * 16);
+	height: calc(var(--p) * 16);
+}
+
+/* The name goes above the pictures, so rows of five books and of one line up alike. */
+.texture-row span {
+	flex-basis: 100%;
+	order: -1;
+	font-size: 0.9rem;
+}
+
+/* A page named by its tab's icon and name, as in the row of tabs. */
+.page-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	vertical-align: middle;
+}
+
+.changes li {
+	margin: 4px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		scroll-behavior: auto !important;
+	}
+}
